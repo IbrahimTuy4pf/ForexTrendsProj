@@ -1,0 +1,156 @@
+# Example: download public daily FX via yfinance instead of the bundled sample CSV.
+# Yahoo FX history is convenient for education, not a professional tick feed.
+
+project:
+  name: quant-forex-ai
+  random_seed: 42
+  log_level: INFO
+
+instrument:
+  symbol: EURUSD
+  base_currency: EUR
+  quote_currency: USD
+  yfinance_ticker: EURUSD=X
+  pip_size: 0.0001
+
+timeframe: 1d
+
+data:
+  source: yfinance
+  csv_path: null
+  yfinance_period: 5y
+  yfinance_interval: 1d
+  timezone: UTC
+  expected_frequency: B
+  drop_duplicates: true
+  sort_chronologically: true
+  missing_value_policy: flag
+  resample_rule: null
+  abnormal_return_threshold: 0.05
+  persist_raw: true
+  persist_processed: true
+
+storage:
+  sqlite_path: data/processed/market_data.sqlite
+
+costs:
+  spread_pips: 1.0
+  slippage_pips: 0.2
+  commission_per_lot: 0.0
+
+risk:
+  risk_per_trade: 0.005
+  max_risk_per_trade: 0.005
+  max_daily_loss: 0.02
+  max_drawdown: 0.10
+  max_leverage: 5.0
+  max_gross_exposure: 2.0
+  max_concurrent_positions: 1
+  max_position_size: 1.0
+  sizing_method: min
+  vol_lookback: 20
+  annual_vol_target: 0.10
+  periods_per_year: 252
+
+execution:
+  live_trading: false
+  paper_trading: false
+  allow_live_override: false
+
+paper:
+  ledger_path: data/processed/paper_ledger.sqlite
+  strategy: null
+
+splits:
+  train_end: "2021-12-31"
+  validation_end: "2023-12-31"
+  fallback_train_fraction: 0.60
+  fallback_validation_fraction: 0.20
+
+models:
+  compare: [logistic, random_forest, gradient_boosting]
+  horizon: 1
+  threshold: 0.0
+  probability_long: 0.55
+  probability_short: 0.45
+  n_estimators: 80
+  max_depth: 3
+  min_samples_leaf: 20
+  backtest_test_fold: true
+
+walk_forward:
+  mode: expanding
+  train_bars: 80
+  validation_bars: 20
+  test_bars: 20
+  step_bars: 20
+  embargo_bars: 0
+  backtest_oos: true
+
+diagnostics:
+  n_bootstrap: 300
+  n_permutations: 40
+  block_size: 10
+  confidence_level: 0.95
+  too_good_total_return: 0.50
+  too_good_max_drawdown: 0.03
+  too_good_sharpe: 2.5
+  auc_gap_warn: 0.15
+  ma_fast_offsets: [-2, 0, 2]
+  ma_slow_offsets: [-4, 0, 4]
+  momentum_lookback_offsets: [-5, 0, 5]
+
+exploration:
+  rolling_window: 20
+  autocorrelation_lags: 5
+  save_matplotlib: true
+  save_plotly_html: true
+
+features:
+  groups: [price, trend, momentum, volatility, time]
+  sma_windows: [10, 20, 50]
+  ema_windows: [12, 26]
+  rolling_return_windows: [5, 20]
+  rsi_window: 14
+  atr_window: 14
+  roc_window: 10
+  momentum_window: 10
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  bb_window: 20
+  bb_std: 2.0
+  vol_window: 20
+  vol_regime_window: 60
+  drop_warmup_rows: false
+  attach_next_return_target: false
+
+strategies:
+  allow_short: true
+  atr_window: 14
+  stop_atr_multiple: 1.5
+  take_profit_atr_multiple: 3.0
+  buy_and_hold:
+    enabled: true
+  ma_crossover:
+    enabled: true
+    fast: 10
+    slow: 20
+  momentum:
+    enabled: true
+    lookback: 20
+    threshold: 0.0
+  mean_reversion:
+    enabled: true
+    window: 20
+    zscore: 1.0
+  breakout:
+    enabled: true
+    lookback: 20
+
+backtest:
+  initial_capital: 10000.0
+  lot_size: 100000.0
+  fill_on: next_open
+  same_bar_stop_take: stop_first
+  account_currency: USD

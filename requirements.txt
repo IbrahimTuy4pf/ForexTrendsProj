@@ -1,0 +1,19 @@
+# Install the project in editable mode instead when possible:
+#   python -m pip install -e ".[dev,notebooks]"
+#
+# This file mirrors Phase 1 runtime + test dependencies for simple pip installs.
+
+pandas>=2.2
+numpy>=1.26
+scipy>=1.13
+matplotlib>=3.8
+plotly>=5.22
+yfinance>=0.2.40
+httpx>=0.27
+pydantic>=2.7
+pydantic-settings>=2.3
+PyYAML>=6.0
+SQLAlchemy>=2.0
+python-dateutil>=2.9
+scikit-learn>=1.5
+pytest>=8.2

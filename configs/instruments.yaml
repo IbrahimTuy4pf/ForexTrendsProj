@@ -1,0 +1,23 @@
+# Catalog of majors supported by configuration. The pipeline never assumes EURUSD.
+pairs:
+  - symbol: EURUSD
+    yfinance_ticker: EURUSD=X
+    pip_size: 0.0001
+  - symbol: GBPUSD
+    yfinance_ticker: GBPUSD=X
+    pip_size: 0.0001
+  - symbol: USDJPY
+    yfinance_ticker: USDJPY=X
+    pip_size: 0.01
+  - symbol: USDCHF
+    yfinance_ticker: USDCHF=X
+    pip_size: 0.0001
+  - symbol: AUDUSD
+    yfinance_ticker: AUDUSD=X
+    pip_size: 0.0001
+  - symbol: USDCAD
+    yfinance_ticker: USDCAD=X
+    pip_size: 0.0001
+  - symbol: NZDUSD
+    yfinance_ticker: NZDUSD=X
+    pip_size: 0.0001
